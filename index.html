@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#176344">
+<title>Unit C1.2 | Coaching Observation Feedback</title>
+<style>
+:root{--navy:#174f3b;--navy2:#103c2c;--paper:#ffffff;--ink:#182b24;--muted:#6b7b73;--line:#dfe8e2;--bg:#f1f5f2;--green:#267452}
+*{box-sizing:border-box;max-width:100%}
+body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:radial-gradient(ellipse at 8% 0%,#e1eee5 0,transparent 35%),linear-gradient(180deg,#f4f7f4 0%,#edf2ee 100%);color:var(--ink);line-height:1.45;overflow-x:hidden}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.topbar{position:relative;background:linear-gradient(118deg,#123d2e 0%,#1b6045 56%,#28704f 100%);color:#fff;padding:24px max(16px,calc((100% - 1050px)/2));border-bottom:4px solid var(--navy);box-shadow:0 12px 30px #103c2c20}
+.schoolmark{font-size:10px;letter-spacing:.19em;text-transform:uppercase;font-weight:700;color:#ffffff}
+.topbar h1{font-family:Georgia,serif;font-weight:500;margin:6px 0 2px;font-size:clamp(22px,4vw,36px)}
+.topbar p{margin:0;color:#d9e8df;font-size:13px}
+.wrap{max-width:1050px;margin:22px auto;padding:0 16px 50px;width:100%}
+.panel{background:#fff;border:1px solid #dfe8e1;border-radius:16px;padding:18px;margin-bottom:18px;box-shadow:0 8px 28px #173f2b0a;width:100%}
+.panel h2{font-family:Georgia,serif;font-weight:500;color:var(--navy);margin:0 0 14px;font-size:22px}
+.subhead{font-size:10px;font-weight:700;letter-spacing:.19em;text-transform:uppercase;color:var(--navy);margin-bottom:5px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%}
+.field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px;color:#31463a}
+.field input,.field select,.notes,.feedback{width:100%;border:1px solid #d5e0d8;border-radius:10px;padding:10px;background:#fcfdfc;color:var(--ink)}
+.field input:focus,.field select:focus,.notes:focus,.feedback:focus{outline:none;border-color:#3c8865;box-shadow:0 0 0 3px #2d80541c;background:#fff}
+.rowitem{padding:14px 0;border-top:1px solid #e8eee9;width:100%}
+.rowitem:first-of-type{border-top:0}
+.rowtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px;flex-wrap:wrap}
+.rating-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;width:100%}
+.rating{height:44px;border:2px solid transparent;border-radius:10px;font-weight:800;font-size:11px;display:flex;align-items:center;justify-content:center;transition:.15s;padding:0 4px;text-align:center}
+.rating[data-rating="green"]{background:#dff3e9;color:#18583e}
+.rating[data-rating="orange"]{background:#ffead8;color:#82410c}
+.rating[data-rating="red"]{background:#ffe0e0;color:#8a2020}
+.rating[aria-pressed="true"]{outline:3px solid #103c2c!important;outline-offset:1px!important;border-color:#103c2c!important;box-shadow:inset 0 0 0 2px #fff!important}
+.rating[aria-pressed="true"]::before{content:"✓ ";font-weight:900}
+.note-label{font-size:11px;color:var(--muted);display:block;margin:8px 0 4px;font-weight:600}
+.notes{min-height:54px;resize:vertical;font-size:13px;width:100%}
+.score-row{display:flex;flex-direction:column;gap:10px;padding:14px 0;border-top:1px solid #e8eee9;width:100%}
+.score-row:first-of-type{border-top:0}
+.score-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;width:100%}
+.score-controls{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;width:100%}
+.score{height:42px;border:1px solid #d5e0d8;background:#f4f7f4;border-radius:10px;font-weight:700;color:var(--navy);display:flex;align-items:center;justify-content:center;width:100%;min-width:0}
+.score[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy);outline:2px solid #103c2c}
+.skillnote{width:100%;margin-top:2px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;width:100%}
+.primary,.secondary{border:0;border-radius:10px;padding:12px 18px;font-weight:700;font-size:13px}
+.primary{background:linear-gradient(135deg,#226b49,#154832);color:#fff;box-shadow:0 4px 12px #164a321c}
+.secondary{background:#edf3ee;border:1px solid #dce7de;color:var(--navy)}
+.preview{border:1px solid #dbe6dd;border-radius:16px;background:#fff;overflow:hidden;margin-top:20px;box-shadow:0 12px 36px #173f2b0d;width:100%}
+.preview-head{background:linear-gradient(118deg,#123d2e 0%,#1c6044 70%,#28704f 100%);color:#fff;padding:20px;border-bottom:4px solid var(--navy)}
+.preview-body{padding:18px}
+.report-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;flex-wrap:wrap}
+.report-title{font-family:Georgia,serif;color:var(--navy);font-size:22px;margin:0}
+.grade-badge{padding:6px 12px;border-radius:8px;font-weight:800;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:#174f3b;color:#fff;border:1px solid #103c2c;white-space:nowrap}
+.grade-badge[data-grade="PASS"]{background:#267452;color:#fff}
+.grade-badge[data-grade="MERIT"]{background:#174f3b;color:#fff}
+.grade-badge[data-grade="DISTINCTION"]{background:#103c2c;color:#ffd700;border-color:#ffd700}
+.meta-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:18px;width:100%}
+.meta-cell{background:#f4f8f4;border:1px solid #e1eae2;padding:8px 10px;border-radius:8px}
+.meta-cell small{display:block;text-transform:uppercase;letter-spacing:.08em;font-size:9px;color:var(--muted);font-weight:700}
+.meta-cell span{font-size:12px}
+.report-section{margin:20px 0;width:100%}
+.report-section h3{font-size:15px;color:var(--navy);border-bottom:2px solid var(--line);padding-bottom:6px;margin:0 0 10px}
+.report-row{display:grid;grid-template-columns:140px 90px minmax(0,1fr);gap:8px;padding:8px 0;border-bottom:1px solid #eaf0eb;font-size:12px}
+.pill{display:inline-block;border-radius:4px;padding:3px 6px;font-size:10px;font-weight:700;text-transform:uppercase;text-align:center}
+.pill.green{background:#d9f0e5;color:#18583e}
+.pill.orange{background:#ffdfc2;color:#793c0c}
+.pill.red{background:#ffd8d8;color:#8a2020}
+.pill.unrated{background:#e8edf1;color:#596b79}
+.chart-layout{display:grid;grid-template-columns:minmax(200px,280px) minmax(0,1fr);gap:16px;align-items:center;width:100%}
+.chart-layout svg{width:100%;max-width:280px;display:block;margin:auto}
+.legend div{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid #edf2ed;font-size:12px}
+.feedback{min-height:160px;resize:vertical;line-height:1.5;font-size:13px;border-radius:10px;width:100%}
+.footer{border-top:1px solid #dfe8e1;padding-top:12px;color:var(--muted);font-size:10px;display:flex;justify-content:space-between}
+@media(max-width:650px){
+.grid{grid-template-columns:1fr}
+.field style{grid-column:span 1!important}
+.meta-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.chart-layout{grid-template-columns:1fr}
+.report-row{grid-template-columns:1fr;gap:4px}
+.actions button{flex:1;width:100%}
+}
+@media print{
+@page { margin: 0; size: auto; }
+html, body { margin: 0; padding: 12mm 10mm; background: #fff!important; }
+.topbar,.form-area,.screen-actions{display:none!important}
+.preview{border:0;box-shadow:none;margin:0;padding:0}
+.preview-head{background:var(--navy)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.report-row{grid-template-columns:130px 90px minmax(0,1fr);font-size:10px}
+.pill, .grade-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="schoolmark">Unit C1.2</div>
+  <h1>Coaching Observation Feedback</h1>
+  <p>Student development · Session structure & coaching skills</p>
+</header>
+<main class="wrap">
+<div class="form-area">
+  <section class="panel">
+    <div class="subhead">Observation details</div>
+    <h2>Student & session</h2>
+    <div class="grid">
+      <div class="field"><label for="student">Student name</label><input id="student" value="Alex Taylor"></div>
+      <div class="field"><label for="observer">Observer</label><input id="observer" value="J. Smith"></div>
+      <div class="field"><label for="activity">Sport / activity</label><input id="activity" value="Basketball"></div>
+      <div class="field"><label for="date">Observation date</label><input id="date" type="date"></div>
+      <div class="field"><label for="focus">Session focus / objective</label><input id="focus" value="Defensive transition & spatial awareness"></div>
+      <div class="field"><label for="group">Group / year (optional)</label><input id="group" value="Year 10"></div>
+      <div class="field" style="grid-column: span 2">
+        <label for="grade">Overall Grade Awarded</label>
+        <select id="grade">
+          <option value="PASS">PASS</option>
+          <option value="MERIT" selected>MERIT</option>
+          <option value="DISTINCTION">DISTINCTION</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="subhead">Section 1</div>
+    <h2>Session structure</h2>
+    <div id="sessionInputs"></div>
+  </section>
+
+  <section class="panel">
+    <div class="subhead">Section 2</div>
+    <h2>Coaching skills</h2>
+    <div id="skillInputs"></div>
+  </section>
+
+  <section class="panel">
+    <div class="subhead">Feedback</div>
+    <h2>Generate & refine</h2>
+    <div class="actions">
+      <button class="primary" id="generate">Generate feedback draft</button>
+      <button class="secondary" id="reset">Clear form</button>
+    </div>
+  </section>
+</div>
+
+<section class="preview" id="report">
+  <div class="preview-head">
+    <div class="schoolmark">Unit C1.2</div>
+    <h2>Coaching Observation Feedback</h2>
+  </div>
+  <div class="preview-body">
+    <div class="report-title-row">
+      <h2 class="report-title" id="reportStudent">Alex Taylor</h2>
+      <div class="grade-badge" id="outGrade" data-grade="MERIT">GRADE: MERIT</div>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell"><small>Observer</small><span id="outObserver">J. Smith</span></div>
+      <div class="meta-cell"><small>Date</small><span id="outDate">—</span></div>
+      <div class="meta-cell"><small>Sport / activity</small><span id="outActivity">Basketball</span></div>
+      <div class="meta-cell"><small>Group / year</small><span id="outGroup">Year 10</span></div>
+      <div class="meta-cell" style="grid-column:span 2"><small>Session focus</small><span id="outFocus">Defensive transition</span></div>
+    </div>
+    <div class="report-section">
+      <h3>1. Session structure</h3>
+      <div id="sessionReport"></div>
+    </div>
+    <div class="report-section">
+      <h3>2. Coaching skills performance profile</h3>
+      <div class="chart-layout">
+        <svg id="radar" viewBox="-35 0 390 300"></svg>
+        <div class="legend" id="skillLegend"></div>
+      </div>
+    </div>
+    <div class="report-section">
+      <h3>Coaching feedback & next steps</h3>
+      <textarea id="feedbackText" class="feedback" placeholder="Generated feedback will appear here..."></textarea>
+    </div>
+    <div class="footer">
+      <span>Coaching Observation Report</span>
+      <span>Confidential student development feedback</span>
+    </div>
+  </div>
+</section>
+
+<div class="screen-actions actions" style="margin-top:14px">
+  <button class="primary" id="export">Export PDF / Print report</button>
+  <button class="secondary" id="copyFeedback">Copy feedback text</button>
+</div>
+</main>
+
+<script>
+const sessionStages = ['Introduction', 'Warm-up', 'Drill 1', 'Drill 2', 'Game play/competition', 'Cool-down', 'Debrief'];
+const skills = ['Feedback', 'Demonstrations', 'Rapport', 'Organisation', 'Communication'];
+const stageHelp = { green: 'Effective practice', orange: 'Needs attention', red: 'Priority for improvement' };
+
+const sessionRatings = {}, sessionNotes = {}, skillScores = {}, skillNotes = {};
+
+document.getElementById('date').valueAsDate = new Date();
+
+function initInputs() {
+  const sRoot = document.getElementById('sessionInputs');
+  sRoot.innerHTML = sessionStages.map((st, i) => {
+    sessionRatings[st] = ''; sessionNotes[st] = '';
+    return `<div class="rowitem"><div class="rowtop"><strong>${st}</strong>
+      <div class="rating-buttons">
+        <button type="button" class="rating" data-rating="green" onclick="setStage('${st}','green')">Effective</button>
+        <button type="button" class="rating" data-rating="orange" onclick="setStage('${st}','orange')">Attention</button>
+        <button type="button" class="rating" data-rating="red" onclick="setStage('${st}','red')">Priority</button>
+      </div></div>
+      <label class="note-label">Observation notes (optional)</label>
+      <textarea class="notes" oninput="sessionNotes['${st}']=this.value;updateReport()"></textarea></div>`;
+  }).join('');
+
+  const kRoot = document.getElementById('skillInputs');
+  kRoot.innerHTML = skills.map((sk, i) => {
+    skillScores[sk] = 0; skillNotes[sk] = '';
+    return `<div class="score-row">
+      <div class="score-header">
+        <strong>${sk}</strong>
+        <div class="score-controls">
+          ${[1,2,3,4,5].map(n => `<button type="button" class="score" data-skill="${sk}" data-val="${n}" onclick="setSkill('${sk}',${n})">${n}</button>`).join('')}
+        </div>
+      </div>
+      <div class="skillnote"><textarea class="notes" placeholder="Observation note (optional)" oninput="skillNotes['${sk}']=this.value;updateReport()"></textarea></div>
+    </div>`;
+  }).join('');
+}
+
+function setStage(st, r) { sessionRatings[st] = r; updateUI(); updateReport(); }
+function setSkill(sk, v) { skillScores[sk] = v; updateUI(); updateReport(); }
+
+function updateUI() {
+  document.querySelectorAll('#sessionInputs .rowitem').forEach((row, i) => {
+    const st = sessionStages[i];
+    row.querySelectorAll('.rating').forEach(b => {
+      b.setAttribute('aria-pressed', sessionRatings[st] === b.dataset.rating ? 'true' : 'false');
+    });
+  });
+  document.querySelectorAll('#skillInputs .score-row').forEach((row, i) => {
+    const sk = skills[i];
+    row.querySelectorAll('.score').forEach(b => {
+      b.setAttribute('aria-pressed', skillScores[sk] === parseInt(b.dataset.val) ? 'true' : 'false');
+    });
+  });
+}
+
+function updateReport() {
+  document.getElementById('reportStudent').textContent = document.getElementById('student').value || 'Student name';
+  document.getElementById('outObserver').textContent = document.getElementById('observer').value || '—';
+  document.getElementById('outActivity').textContent = document.getElementById('activity').value || '—';
+  document.getElementById('outGroup').textContent = document.getElementById('group').value || '—';
+  document.getElementById('outFocus').textContent = document.getElementById('focus').value || '—';
+  document.getElementById('outDate').textContent = document.getElementById('date').value || '—';
+
+  const selectedGrade = document.getElementById('grade').value;
+  const gradeBadge = document.getElementById('outGrade');
+  gradeBadge.textContent = `GRADE: ${selectedGrade}`;
+  gradeBadge.setAttribute('data-grade', selectedGrade);
+
+  document.getElementById('sessionReport').innerHTML = sessionStages.map(s => {
+    const r = sessionRatings[s], n = sessionNotes[s];
+    return `<div class="report-row"><strong>${s}</strong><span class="pill ${r||'unrated'}">${r?stageHelp[r]:'Not rated'}</span><div>${n||'<span style="color:#8794a0">No note added</span>'}</div></div>`;
+  }).join('');
+
+  drawRadar();
+}
+
+function drawRadar() {
+  const svg = document.getElementById('radar'), cx = 160, cy = 143, R = 88;
+  svg.innerHTML = '';
+  const ns = 'http://www.w3.org/2000/svg';
+  const point = (i, r) => [cx + r * Math.cos(-Math.PI/2 + i * 2 * Math.PI / skills.length), cy + r * Math.sin(-Math.PI/2 + i * 2 * Math.PI / skills.length)];
+
+  for (let k = 1; k <= 5; k++) {
+    const poly = document.createElementNS(ns, 'polygon');
+    poly.setAttribute('points', skills.map((_, i) => point(i, R * k / 5).join(',')).join(' '));
+    poly.setAttribute('fill', 'none'); poly.setAttribute('stroke', '#9cabb7');
+    poly.setAttribute('stroke-width', k === 5 ? '1.3' : '.7');
+    svg.appendChild(poly);
+  }
+
+  skills.forEach((s, i) => {
+    const p = point(i, R);
+    const line = document.createElementNS(ns, 'line');
+    line.setAttribute('x1', cx); line.setAttribute('y1', cy); line.setAttribute('x2', p[0]); line.setAttribute('y2', p[1]);
+    line.setAttribute('stroke', '#9cabb7'); svg.appendChild(line);
+
+    const lp = point(i, R + 23);
+    const txt = document.createElementNS(ns, 'text');
+    txt.setAttribute('x', lp[0]); txt.setAttribute('y', lp[1] + 4);
+    txt.setAttribute('font-size', '10'); txt.setAttribute('fill', '#174f3b');
+    txt.setAttribute('text-anchor', lp[0] < cx - 12 ? 'end' : lp[0] > cx + 12 ? 'start' : 'middle');
+    txt.textContent = s; svg.appendChild(txt);
+  });
+
+  const rated = skills.map(s => skillScores[s]);
+  const poly = document.createElementNS(ns, 'polygon');
+  poly.setAttribute('points', skills.map((_, i) => point(i, R * (rated[i] || 0) / 5).join(',')).join(' '));
+  poly.setAttribute('fill', '#174f3b'); poly.setAttribute('fill-opacity', '.2');
+  poly.setAttribute('stroke', '#176344'); poly.setAttribute('stroke-width', '2');
+  svg.appendChild(poly);
+
+  document.getElementById('skillLegend').innerHTML = skills.map(s => `<div><span>${s}</span><b>${skillScores[s]||'—'} / 5</b></div><div style="font-size:11px;color:#6b7b73;margin-bottom:6px">${skillNotes[s]||'No note added'}</div>`).join('');
+}
+
+function buildFeedback() {
+  const strengths = skills.filter(s => skillScores[s] >= 4);
+  const priorities = skills.filter(s => skillScores[s] > 0 && skillScores[s] <= 2);
+  const stageDev = sessionStages.filter(s => ['orange','red'].includes(sessionRatings[s]));
+
+  let text = `Overall observation\nYou coached the session with a focus on ${document.getElementById('focus').value || 'coaching practice'}.\n\n`;
+  if (strengths.length) text += `Strengths\nYour strongest rated skills were ${strengths.join(', ')}. Keep applying these techniques consistently.\n\n`;
+  if (priorities.length) text += `Development priorities\nFocus your effort on ${priorities.join(', ')} to increase overall session clarity.\n\n`;
+  if (stageDev.length) text += `Session structure\nReview ${stageDev.join(', ')}. Ensure time limits and transitions are planned clearly in advance.\n\n`;
+
+  text += `Next steps\n1. Prepare structured intervention points prior to the session.\n2. Review progress during the next coaching observation.`;
+
+  document.getElementById('feedbackText').value = text;
+}
+
+document.getElementById('generate').addEventListener('click', buildFeedback);
+document.getElementById('export').addEventListener('click', () => window.print());
+document.getElementById('copyFeedback').addEventListener('click', () => {
+  navigator.clipboard.writeText(document.getElementById('feedbackText').value);
+  alert('Feedback copied to clipboard.');
+});
+document.getElementById('reset').addEventListener('click', () => {
+  if (confirm('Clear form entries?')) {
+    sessionStages.forEach(s => sessionRatings[s] = '');
+    skills.forEach(s => skillScores[s] = 0);
+    updateUI(); updateReport();
+  }
+});
+
+['student','observer','activity','date','focus','group','grade'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateReport);
+});
+
+initInputs();
+updateReport();
+</script>
+</body>
+</html>
