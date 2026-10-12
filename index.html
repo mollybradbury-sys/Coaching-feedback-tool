@@ -70,12 +70,10 @@ button{cursor:pointer}
 .chart-layout{display:grid;grid-template-columns:minmax(200px,280px) minmax(0,1fr);gap:16px;align-items:center;width:100%}
 .chart-layout svg{width:100%;max-width:280px;display:block;margin:auto}
 .legend div{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid #edf2ed;font-size:12px}
-.feedback{min-height:120px;resize:vertical;line-height:1.5;font-size:13px;border-radius:10px;width:100%}
 
 /* Colour-coded feedback callout boxes */
-.strengths-box{background:#eef7f2;border:1.5px solid #267452;border-radius:10px;padding:12px;font-size:13px;line-height:1.5;color:#103c2c;white-space:pre-wrap;min-height:48px;margin-bottom:16px}
-.areas-box{background:#fff7ee;border:1.5px solid #d97706;border-radius:10px;padding:12px;font-size:13px;line-height:1.5;color:#78350f;white-space:pre-wrap;min-height:48px;margin-bottom:16px}
-.feedback-box{background:#f8faf9;border:1.5px solid #c8d6cb;border-radius:10px;padding:12px;font-size:13px;line-height:1.5;color:var(--ink);white-space:pre-wrap;min-height:48px}
+.strengths-box{background:#eef7f2;border:1.5px solid #267452;border-radius:10px;padding:12px;font-size:13px;line-height:1.5;color:#103c2c;white-space:pre-wrap;min-height:54px;margin-bottom:16px}
+.areas-box{background:#fff7ee;border:1.5px solid #d97706;border-radius:10px;padding:12px;font-size:13px;line-height:1.5;color:#78350f;white-space:pre-wrap;min-height:54px;margin-bottom:16px}
 
 .footer{border-top:1px solid #dfe8e1;padding-top:12px;color:var(--muted);font-size:10px;display:flex;justify-content:space-between}
 
@@ -107,13 +105,10 @@ html, body { margin: 0; padding: 0; background: #fff!important; font-size: 11px;
 }
 
 .report-row{grid-template-columns:130px 90px minmax(0,1fr);font-size:10px;padding:4px 0}
-.pill, .grade-badge, .strengths-box, .areas-box, .feedback-box {-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pill, .grade-badge, .strengths-box, .areas-box {-webkit-print-color-adjust:exact;print-color-adjust:exact}
 
 .strengths-box{background:#eef7f2!important;border:1.5px solid #267452!important;padding:10px;font-size:11px;line-height:1.4}
 .areas-box{background:#fff7ee!important;border:1.5px solid #d97706!important;padding:10px;font-size:11px;line-height:1.4}
-.feedback-box{background:#f8faf9!important;border:1px solid #c8d6cb!important;padding:10px;font-size:11px;line-height:1.4}
-
-.feedback{display:none!important}
 }
 </style>
 </head>
@@ -160,14 +155,14 @@ html, body { margin: 0; padding: 0; background: #fff!important; font-size: 11px;
 
   <section class="panel">
     <div class="subhead">Feedback & Summary</div>
-    <h2>Strengths, development & feedback</h2>
+    <h2>Strengths & Development</h2>
     <div class="field" style="margin-bottom:12px">
       <label for="inputStrengths">Key Strengths</label>
       <textarea id="inputStrengths" class="notes" style="min-height:70px" placeholder="Enter key coaching strengths..."></textarea>
     </div>
     <div class="field" style="margin-bottom:12px">
-      <label for="inputAreas">Areas for Development</label>
-      <textarea id="inputAreas" class="notes" style="min-height:70px" placeholder="Enter areas for future development..."></textarea>
+      <label for="inputAreas">Areas for Development & Next Steps</label>
+      <textarea id="inputAreas" class="notes" style="min-height:85px" placeholder="Enter areas for development and actionable next steps..."></textarea>
     </div>
     <div class="actions">
       <button class="primary" id="generate">Generate feedback draft</button>
@@ -217,14 +212,8 @@ html, body { margin: 0; padding: 0; background: #fff!important; font-size: 11px;
     </div>
 
     <div class="report-section">
-      <h3 style="color:#78350f">Areas for Development</h3>
+      <h3 style="color:#78350f">Areas for Development & Next Steps</h3>
       <div id="outAreas" class="areas-box">None specified.</div>
-    </div>
-
-    <div class="report-section">
-      <h3>Coaching feedback & next steps</h3>
-      <textarea id="feedbackText" class="feedback" placeholder="Generated feedback will appear here..."></textarea>
-      <div id="outFeedback" class="feedback-box" style="display:none"></div>
     </div>
 
     <div class="footer">
@@ -311,11 +300,9 @@ function updateReport() {
 
   const sText = document.getElementById('inputStrengths').value.trim();
   const aText = document.getElementById('inputAreas').value.trim();
-  const fText = document.getElementById('feedbackText').value.trim();
 
   document.getElementById('outStrengths').textContent = sText || 'None specified.';
   document.getElementById('outAreas').textContent = aText || 'None specified.';
-  document.getElementById('outFeedback').textContent = fText || 'None specified.';
 
   document.getElementById('sessionReport').innerHTML = sessionStages.map(s => {
     const r = sessionRatings[s], n = sessionNotes[s];
@@ -369,38 +356,24 @@ function buildFeedback() {
   const stageDev = sessionStages.filter(s => ['orange','red'].includes(sessionRatings[s]));
 
   if (strengths.length) {
-    document.getElementById('inputStrengths').value = `Demonstrated strong performance in: ${strengths.join(', ')}.`;
+    document.getElementById('inputStrengths').value = `Demonstrated strong performance in: ${strengths.join(', ')}. Keep applying these techniques consistently throughout future sessions.`;
   }
-  if (priorities.length || stageDev.length) {
-    let areas = [];
-    if (priorities.length) areas.push(`Focus on improving: ${priorities.join(', ')}.`);
-    if (stageDev.length) areas.push(`Review session structure for: ${stageDev.join(', ')}.`);
-    document.getElementById('inputAreas').value = areas.join(' ');
-  }
+  
+  let areas = [];
+  if (priorities.length) areas.push(`Focus effort on improving: ${priorities.join(', ')}.`);
+  if (stageDev.length) areas.push(`Review session structure for: ${stageDev.join(', ')}.`);
+  areas.push("Next steps: 1. Prepare structured intervention points prior to session. 2. Review progress during next observation.");
 
-  let text = `Overall observation\nYou coached the session with a focus on ${document.getElementById('focus').value || 'coaching practice'}.\n\n`;
-  if (strengths.length) text += `Strengths\nYour strongest rated skills were ${strengths.join(', ')}. Keep applying these techniques consistently.\n\n`;
-  if (priorities.length) text += `Development priorities\nFocus your effort on ${priorities.join(', ')} to increase overall session clarity.\n\n`;
-  if (stageDev.length) text += `Session structure\nReview ${stageDev.join(', ')}. Ensure time limits and transitions are planned clearly in advance.\n\n`;
-
-  text += `Next steps\n1. Prepare structured intervention points prior to the session.\n2. Review progress during the next coaching observation.`;
-
-  document.getElementById('feedbackText').value = text;
+  document.getElementById('inputAreas').value = areas.join('\n\n');
   updateReport();
 }
-
-window.addEventListener('beforeprint', () => {
-  document.getElementById('outFeedback').style.display = 'block';
-});
-window.addEventListener('afterprint', () => {
-  document.getElementById('outFeedback').style.display = 'none';
-});
 
 document.getElementById('generate').addEventListener('click', buildFeedback);
 document.getElementById('export').addEventListener('click', () => window.print());
 document.getElementById('copyFeedback').addEventListener('click', () => {
-  navigator.clipboard.writeText(document.getElementById('feedbackText').value);
-  alert('Feedback copied to clipboard.');
+  const fullText = `KEY STRENGTHS:\n${document.getElementById('inputStrengths').value}\n\nAREAS FOR DEVELOPMENT & NEXT STEPS:\n${document.getElementById('inputAreas').value}`;
+  navigator.clipboard.writeText(fullText);
+  alert('Feedback text copied to clipboard.');
 });
 document.getElementById('reset').addEventListener('click', () => {
   if (confirm('Clear form entries?')) {
@@ -408,12 +381,11 @@ document.getElementById('reset').addEventListener('click', () => {
     skills.forEach(s => skillScores[s] = 0);
     document.getElementById('inputStrengths').value = '';
     document.getElementById('inputAreas').value = '';
-    document.getElementById('feedbackText').value = '';
     updateUI(); updateReport();
   }
 });
 
-['student','observer','activity','date','focus','group','grade','inputStrengths','inputAreas','feedbackText'].forEach(id => {
+['student','observer','activity','date','focus','group','grade','inputStrengths','inputAreas'].forEach(id => {
   document.getElementById(id).addEventListener('input', updateReport);
 });
 
