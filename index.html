@@ -71,7 +71,14 @@ button{cursor:pointer}
 .chart-layout svg{width:100%;max-width:280px;display:block;margin:auto}
 .legend div{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid #edf2ed;font-size:12px}
 .feedback{min-height:120px;resize:vertical;line-height:1.5;font-size:13px;border-radius:10px;width:100%}
+
+/* Colour-coded feedback callout boxes */
+.strengths-box{background:#eef7f2;border:1.5px solid #267452;border-radius:10px;padding:12px;font-size:13px;line-height:1.5;color:#103c2c;white-space:pre-wrap;min-height:48px;margin-bottom:16px}
+.areas-box{background:#fff7ee;border:1.5px solid #d97706;border-radius:10px;padding:12px;font-size:13px;line-height:1.5;color:#78350f;white-space:pre-wrap;min-height:48px;margin-bottom:16px}
+.feedback-box{background:#f8faf9;border:1.5px solid #c8d6cb;border-radius:10px;padding:12px;font-size:13px;line-height:1.5;color:var(--ink);white-space:pre-wrap;min-height:48px}
+
 .footer{border-top:1px solid #dfe8e1;padding-top:12px;color:var(--muted);font-size:10px;display:flex;justify-content:space-between}
+
 @media(max-width:650px){
 .grid{grid-template-columns:1fr}
 .field style{grid-column:span 1!important}
@@ -80,14 +87,33 @@ button{cursor:pointer}
 .report-row{grid-template-columns:1fr;gap:4px}
 .actions button{flex:1;width:100%}
 }
+
 @media print{
-@page { margin: 0; size: auto; }
-html, body { margin: 0; padding: 12mm 10mm; background: #fff!important; }
+@page { margin: 12mm 10mm; size: A4 portrait; }
+html, body { margin: 0; padding: 0; background: #fff!important; font-size: 11px; }
 .topbar,.form-area,.screen-actions{display:none!important}
+.wrap{margin:0;padding:0;max-width:100%}
 .preview{border:0;box-shadow:none;margin:0;padding:0}
-.preview-head{background:var(--navy)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.report-row{grid-template-columns:130px 90px minmax(0,1fr);font-size:10px}
-.pill, .grade-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.preview-head{background:var(--navy)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:12px 16px}
+.preview-body{padding:12px 0}
+.report-section{margin:12px 0;page-break-inside:avoid;break-inside:avoid}
+
+/* Force Section 2 (Coaching Skills) to start at the top of Page 2 */
+.section-page-2 {
+  page-break-before: always !important;
+  break-before: page !important;
+  margin-top: 0 !important;
+  padding-top: 10px !important;
+}
+
+.report-row{grid-template-columns:130px 90px minmax(0,1fr);font-size:10px;padding:4px 0}
+.pill, .grade-badge, .strengths-box, .areas-box, .feedback-box {-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.strengths-box{background:#eef7f2!important;border:1.5px solid #267452!important;padding:10px;font-size:11px;line-height:1.4}
+.areas-box{background:#fff7ee!important;border:1.5px solid #d97706!important;padding:10px;font-size:11px;line-height:1.4}
+.feedback-box{background:#f8faf9!important;border:1px solid #c8d6cb!important;padding:10px;font-size:11px;line-height:1.4}
+
+.feedback{display:none!important}
 }
 </style>
 </head>
@@ -150,12 +176,15 @@ html, body { margin: 0; padding: 12mm 10mm; background: #fff!important; }
   </section>
 </div>
 
+<!-- PDF / Report View -->
 <section class="preview" id="report">
   <div class="preview-head">
     <div class="schoolmark">Unit C1.2</div>
     <h2>Coaching Observation Feedback</h2>
   </div>
   <div class="preview-body">
+    
+    <!-- PAGE 1 CONTENT -->
     <div class="report-title-row">
       <h2 class="report-title" id="reportStudent">Alex Taylor</h2>
       <div class="grade-badge" id="outGrade" data-grade="MERIT">GRADE: MERIT</div>
@@ -167,29 +196,37 @@ html, body { margin: 0; padding: 12mm 10mm; background: #fff!important; }
       <div class="meta-cell"><small>Group / year</small><span id="outGroup">Year 10</span></div>
       <div class="meta-cell" style="grid-column:span 2"><small>Session focus</small><span id="outFocus">Defensive transition</span></div>
     </div>
+    
     <div class="report-section">
       <h3>1. Session structure</h3>
       <div id="sessionReport"></div>
     </div>
-    <div class="report-section">
+
+    <!-- PAGE 2 CONTENT (Forced Page Break) -->
+    <div class="report-section section-page-2">
       <h3>2. Coaching skills performance profile</h3>
       <div class="chart-layout">
         <svg id="radar" viewBox="-35 0 390 300"></svg>
         <div class="legend" id="skillLegend"></div>
       </div>
     </div>
+
     <div class="report-section">
-      <h3>Key Strengths</h3>
-      <textarea id="outStrengths" class="feedback" style="min-height:90px" placeholder="Strengths notes will appear here..."></textarea>
+      <h3 style="color:#103c2c">Key Strengths</h3>
+      <div id="outStrengths" class="strengths-box">None specified.</div>
     </div>
+
     <div class="report-section">
-      <h3>Areas for Development</h3>
-      <textarea id="outAreas" class="feedback" style="min-height:90px" placeholder="Areas for development will appear here..."></textarea>
+      <h3 style="color:#78350f">Areas for Development</h3>
+      <div id="outAreas" class="areas-box">None specified.</div>
     </div>
+
     <div class="report-section">
       <h3>Coaching feedback & next steps</h3>
       <textarea id="feedbackText" class="feedback" placeholder="Generated feedback will appear here..."></textarea>
+      <div id="outFeedback" class="feedback-box" style="display:none"></div>
     </div>
+
     <div class="footer">
       <span>Coaching Observation Report</span>
       <span>Confidential student development feedback</span>
@@ -272,8 +309,13 @@ function updateReport() {
   gradeBadge.textContent = `GRADE: ${selectedGrade}`;
   gradeBadge.setAttribute('data-grade', selectedGrade);
 
-  document.getElementById('outStrengths').value = document.getElementById('inputStrengths').value;
-  document.getElementById('outAreas').value = document.getElementById('inputAreas').value;
+  const sText = document.getElementById('inputStrengths').value.trim();
+  const aText = document.getElementById('inputAreas').value.trim();
+  const fText = document.getElementById('feedbackText').value.trim();
+
+  document.getElementById('outStrengths').textContent = sText || 'None specified.';
+  document.getElementById('outAreas').textContent = aText || 'None specified.';
+  document.getElementById('outFeedback').textContent = fText || 'None specified.';
 
   document.getElementById('sessionReport').innerHTML = sessionStages.map(s => {
     const r = sessionRatings[s], n = sessionNotes[s];
@@ -347,6 +389,13 @@ function buildFeedback() {
   updateReport();
 }
 
+window.addEventListener('beforeprint', () => {
+  document.getElementById('outFeedback').style.display = 'block';
+});
+window.addEventListener('afterprint', () => {
+  document.getElementById('outFeedback').style.display = 'none';
+});
+
 document.getElementById('generate').addEventListener('click', buildFeedback);
 document.getElementById('export').addEventListener('click', () => window.print());
 document.getElementById('copyFeedback').addEventListener('click', () => {
@@ -359,11 +408,12 @@ document.getElementById('reset').addEventListener('click', () => {
     skills.forEach(s => skillScores[s] = 0);
     document.getElementById('inputStrengths').value = '';
     document.getElementById('inputAreas').value = '';
+    document.getElementById('feedbackText').value = '';
     updateUI(); updateReport();
   }
 });
 
-['student','observer','activity','date','focus','group','grade','inputStrengths','inputAreas'].forEach(id => {
+['student','observer','activity','date','focus','group','grade','inputStrengths','inputAreas','feedbackText'].forEach(id => {
   document.getElementById(id).addEventListener('input', updateReport);
 });
 
